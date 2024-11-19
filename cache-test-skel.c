@@ -2,8 +2,8 @@
  * CSE 351 Lab 4 (Caches and Cache-Friendly Code)
  * Part 1 - Inferring Mystery Cache Geometries
  *
- * Name(s):  
- * NetID(s): 
+ * Name(s):  Landon Davidson
+ * NetID(s): landond
  *
  * NOTES:
  * 1. When using access_cache() you do not need to provide a "real" memory
@@ -25,8 +25,6 @@
 
 /* Returns the size (in B) of each block in the cache. */
 int get_block_size(void) {
-  /* YOUR CODE GOES HERE */
-
   return -1;
 }
 
