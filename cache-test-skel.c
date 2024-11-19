@@ -25,14 +25,24 @@
 
 /* Returns the size (in B) of each block in the cache. */
 int get_block_size(void) {
-  return -1;
+  int block_size = 1;
+  access_cache(0);
+  for (; access_cache(block_size); block_size *= 2) {}
+  return block_size;
 }
 
 
 /* Returns the size (in B) of the cache. */
 int get_cache_size(int block_size) {
-  /* YOUR CODE GOES HERE */
-  return -1;
+  int cache_size = 1;
+  do {
+    flush_cache();
+    for (int i = 0; i <= cache_size; i++) {
+      access_cache(i * block_size);
+    }
+    cache_size *= 2;
+  } while (access_cache(0));
+  return cache_size * block_size / 2;
 }
 
 
