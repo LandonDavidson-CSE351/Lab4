@@ -27,7 +27,10 @@
 int get_block_size(void) {
   int block_size = 1;
   access_cache(0);
+  // Repeatedly double block_size until you find a block that wasn't pulled in
+  // by the access_cache(0) call
   for (; access_cache(block_size); block_size *= 2) {}
+  flush_cache();
   return block_size;
 }
 
@@ -35,21 +38,35 @@ int get_block_size(void) {
 /* Returns the size (in B) of the cache. */
 int get_cache_size(int block_size) {
   int cache_size = 1;
-  do {
+  access_cache(0);
+  for (; access_cache(0); cache_size *= 2) {
     flush_cache();
+    // For each possible cache_size access every block from 0 to cache_size,
+    // and if the block at 0 isn't in the cache anymore that was 2* the correct
+    // cache_size. The inner for loop is needed because of the LRU policy
     for (int i = 0; i <= cache_size; i++) {
       access_cache(i * block_size);
     }
-    cache_size *= 2;
-  } while (access_cache(0));
+  }
+  flush_cache();
   return cache_size * block_size / 2;
 }
 
 
 /* Returns the associativity of the cache. */
 int get_cache_assoc(int cache_size) {
-  /* YOUR CODE GOES HERE */
-  return -1;
+  int cache_assoc = 1;
+  access_cache(0);
+  // For each possible cache_assoc access the first cache_assoc blocks at the
+  // same index across different cache images. If the block at 0 isn't in
+  // the cache anymore than the current cache_assoc is one more than correct
+  for (; access_cache(0); cache_assoc++) {
+    flush_cache();
+    for (int i = 0; i < cache_assoc + 1; i++) {
+      access_cache(i * cache_size);
+    }
+  }
+  return cache_assoc - 1;
 }
 
 
