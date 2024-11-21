@@ -25,8 +25,27 @@ int is_transpose(int M, int N, int A[M][N], int B[N][M]);
  *     driver searches for that string to identify the transpose function to be
  *     graded.
  */
+#define BLOCK_SIZE 8
 char transpose_submit_desc[] = "Transpose submission";
 void transpose_submit(int M, int N, int A[M][N], int B[N][M]) {
+    if (M != N) return;
+    if (M == 32) {
+        for (int x_block = 0; x_block < M / BLOCK_SIZE; x_block++) {
+            for (int y_block = 0; y_block < N / BLOCK_SIZE; y_block++) {
+                for (int i = x_block * BLOCK_SIZE; i < (x_block + 1) * BLOCK_SIZE; i++) {
+                    int Ai[BLOCK_SIZE];
+                    for (int element = 0; element < BLOCK_SIZE; element++) {
+                        Ai[element] = A[i][element + y_block * BLOCK_SIZE];
+                    }
+                    for (int j = y_block * BLOCK_SIZE; j < (y_block + 1) * BLOCK_SIZE; j++) {
+                        B[j][i] = Ai[j % BLOCK_SIZE];
+                    }
+                }
+            }
+        }
+    } else if (M == 64) {
+
+    }
 
 }
 
