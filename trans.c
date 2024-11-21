@@ -2,8 +2,8 @@
  * CSE 351 Lab 4 (Caches and Cache-Friendly Code)
  * Part 2 - Optimizing Matrix Transpose
  *
- * Name(s):  
- * NetID(s): 
+ * Name(s):  Landon Davidson
+ * NetID(s): landond
  *
  * Each transpose function must have a prototype of the form:
  * void trans(int M, int N, int A[M][N], int B[N][M]);
