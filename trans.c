@@ -25,26 +25,39 @@ int is_transpose(int M, int N, int A[M][N], int B[N][M]);
  *     driver searches for that string to identify the transpose function to be
  *     graded.
  */
-#define BLOCK_SIZE 8
+#define BLOCK_SIZE_32 8
+#define BLOCK_SIZE_64 4
 char transpose_submit_desc[] = "Transpose submission";
 void transpose_submit(int M, int N, int A[M][N], int B[N][M]) {
     if (M != N) return;
     if (M == 32) {
-        for (int x_block = 0; x_block < M / BLOCK_SIZE; x_block++) {
-            for (int y_block = 0; y_block < N / BLOCK_SIZE; y_block++) {
-                for (int i = x_block * BLOCK_SIZE; i < (x_block + 1) * BLOCK_SIZE; i++) {
-                    int Ai[BLOCK_SIZE];
-                    for (int element = 0; element < BLOCK_SIZE; element++) {
-                        Ai[element] = A[i][element + y_block * BLOCK_SIZE];
+        for (int x_block = 0; x_block < M / BLOCK_SIZE_32; x_block++) {
+            for (int y_block = 0; y_block < N / BLOCK_SIZE_32; y_block++) {
+                for (int i = x_block * BLOCK_SIZE_32; i < (x_block + 1) * BLOCK_SIZE_32; i++) {
+                    int Ai[BLOCK_SIZE_32];
+                    for (int element = 0; element < BLOCK_SIZE_32; element++) {
+                        Ai[element] = A[i][element + y_block * BLOCK_SIZE_32];
                     }
-                    for (int j = y_block * BLOCK_SIZE; j < (y_block + 1) * BLOCK_SIZE; j++) {
-                        B[j][i] = Ai[j % BLOCK_SIZE];
+                    for (int j = y_block * BLOCK_SIZE_32; j < (y_block + 1) * BLOCK_SIZE_32; j++) {
+                        B[j][i] = Ai[j % BLOCK_SIZE_32];
                     }
                 }
             }
         }
     } else if (M == 64) {
-
+        for (int x_block = 0; x_block < M / BLOCK_SIZE_64; x_block++) {
+            for (int y_block = 0; y_block < N / BLOCK_SIZE_64; y_block++) {
+                for (int i = x_block * BLOCK_SIZE_64; i < (x_block + 1) * BLOCK_SIZE_64; i++) {
+                    int Ai[BLOCK_SIZE_64];
+                    for (int element = 0; element < BLOCK_SIZE_64; element++) {
+                        Ai[element] = A[i][element + y_block * BLOCK_SIZE_64];
+                    }
+                    for (int j = y_block * BLOCK_SIZE_64; j < (y_block + 1) * BLOCK_SIZE_64; j++) {
+                        B[j][i] = Ai[j % BLOCK_SIZE_64];
+                    }
+                }
+            }
+        }
     }
 
 }
