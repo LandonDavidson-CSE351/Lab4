@@ -1,37 +1,62 @@
 *****************************
 * Lab 4 Synthesis Questions *
 *****************************
-Name(s):  
-NetID(s): 
+Name(s):  Landon Davidson
+NetID(s): landond
 
 
 -----------------------------------------------------------
 1) Instructions in the nested loops that access memory
-   lab0.d:    <count>
+   lab0.d:    19
    List of instructions for lab0.d:
+    mov    %rax,-0x30(%rbp)
+    movl   $0x0,-0x14(%rbp)
+    movl   $0x0,-0x18(%rbp)
+    movl   $0x0,-0x1c(%rbp)
+    mov    -0x14(%rbp),%edx
+    mov    -0x18(%rbp),%eax
+    mov    -0x1c(%rbp),%edx
+    mov    -0x18(%rbp),%ecx
+    mov    -0x14(%rbp),%eax
+    callq  400939 <bigArrayIndex>
+    mov    -0x28(%rbp),%rax
+    mov    -0x1c(%rbp),%edx
+    mov    %edx,(%rax)
+    addl   $0x1,-0x1c(%rbp)
+    cmpl   $0x1f3,-0x1c(%rbp)
+    addl   $0x1,-0x18(%rbp)
+    cmpl   $0x1f3,-0x18(%rbp)
+    addl   $0x1,-0x14(%rbp)
+    cmpl   $0x1f3,-0x14(%rbp)
 
-   lab0opt.d: <count>
+
+   lab0opt.d: 1
    List of instructions for lab0opt.d:
+    mov    %ecx,(%rsi,%rdx,4)
 
 -----------------------------------------------------------
 2) Where are the loop variables stored in lab0.d:
-   i: 
-   j: 
-   k: 
+   i: -0x14(%rbp)
+   j: -0x18(%rbp)
+   k: -0x1c(%rbp)
 -----------------------------------------------------------
 3) Corresponding values in lab0opt.d:
-   %edx: 
-   %ecx: 
+   %edx: i
+   %ecx: i + j + k
 -----------------------------------------------------------
-4) Effect on number of misses:
+4) Effect on number of misses: increase
 
-   Explain:
+   Explain: It would increase since my 32x32 code uses the full block size of 8 to grab all the numbers from A that
+   it needs before accessing B. If A didn't perfectly align with a block it would take two block reads to pull all
+   the numbers from A and would be wasting an average of half of each block.
 
 
 -----------------------------------------------------------
-5) Effect on number of misses:
+5) Effect on number of misses: Increase
 
-   Explain:
+   Explain: It would increase the number of misses since the rows and columns aren't lined up with block sizes there
+   would be a lot of wasted data in blocks, which results in more cache misses to reread data we didn't see the first
+   time.
 
 
 -----------------------------------------------------------
